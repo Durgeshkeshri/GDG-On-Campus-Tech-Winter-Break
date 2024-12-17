@@ -221,105 +221,107 @@
 
 
 
-// MongoDB - Crud Operations 
+// // MongoDB - Crud Operations 
 
-const express = require('express');
-const mongoose = require('mongoose');
+// const express = require('express');
+// const mongoose = require('mongoose');
+// const cors = require('cors'); // Import cors
+// const app = express();
+// app.use(express.json());
+// app.use(cors({
+//     origin: 'http://localhost:5173' // Allow requests only from this origin
+// }));
+// // MongoDB connection
+// mongoose.connect('mongodb+srv://durgeshkeshri7:Durgesh1027@cluster0.ezhdt7p.mongodb.net/crud-example?retryWrites=true&w=majority', {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+// });
 
-const app = express();
-app.use(express.json());
+// const db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', () => {
+//     console.log('Connected to MongoDB');
+// });
 
-// MongoDB connection
-mongoose.connect('', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+// // Mongoose schema and model
+// const itemSchema = new mongoose.Schema({
+//     name: { type: String, required: true },
+//     description: String,
+//     price: Number,
+// });
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-    console.log('Connected to MongoDB');
-});
+// const Item = mongoose.model('Item', itemSchema);
 
-// Mongoose schema and model
-const itemSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    description: String,
-    price: Number,
-});
+// // Routes
 
-const Item = mongoose.model('Item', itemSchema);
+// // Create
+// app.post('/items', async (req, res) => {
+//     const { name, description, price } = req.body;
+//     try {
+//         const newItem = new Item({ name, description, price });
+//         await newItem.save();
+//         res.status(201).json(newItem);
+//     } catch (error) {
+//         res.status(400).json({ error: error.message });
+//     }
+// });
 
-// Routes
+// // Read All
+// app.get('/items', async (req, res) => {
+//     try {
+//         const items = await Item.find();
+//         res.json(items);
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// });
 
-// Create
-app.post('/items', async (req, res) => {
-    const { name, description, price } = req.body;
-    try {
-        const newItem = new Item({ name, description, price });
-        await newItem.save();
-        res.status(201).json(newItem);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-});
+// // Read One
+// app.get('/items/:id', async (req, res) => {
+//     try {
+//         const item = await Item.findById(req.params.id);
+//         if (!item) {
+//             return res.status(404).json({ message: 'Item not found' });
+//         }
+//         res.json(item);
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// });
 
-// Read All
-app.get('/items', async (req, res) => {
-    try {
-        const items = await Item.find();
-        res.json(items);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
+// // Update
+// app.put('/items/:id', async (req, res) => {
+//     const { name, description, price } = req.body;
+//     try {
+//         const updatedItem = await Item.findByIdAndUpdate(
+//             req.params.id,
+//             { name, description, price },
+//             { new: true }
+//         );
+//         if (!updatedItem) {
+//             return res.status(404).json({ message: 'Item not found' });
+//         }
+//         res.json(updatedItem);
+//     } catch (error) {
+//         res.status(400).json({ error: error.message });
+//     }
+// });
 
-// Read One
-app.get('/items/:id', async (req, res) => {
-    try {
-        const item = await Item.findById(req.params.id);
-        if (!item) {
-            return res.status(404).json({ message: 'Item not found' });
-        }
-        res.json(item);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
+// // Delete
+// app.delete('/items/:id', async (req, res) => {
+//     try {
+//         const deletedItem = await Item.findByIdAndDelete(req.params.id);
+//         if (!deletedItem) {
+//             return res.status(404).json({ message: 'Item not found' });
+//         }
+//         res.json({ message: 'Item deleted successfully' });
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// });
 
-// Update
-app.put('/items/:id', async (req, res) => {
-    const { name, description, price } = req.body;
-    try {
-        const updatedItem = await Item.findByIdAndUpdate(
-            req.params.id,
-            { name, description, price },
-            { new: true }
-        );
-        if (!updatedItem) {
-            return res.status(404).json({ message: 'Item not found' });
-        }
-        res.json(updatedItem);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-});
-
-// Delete
-app.delete('/items/:id', async (req, res) => {
-    try {
-        const deletedItem = await Item.findByIdAndDelete(req.params.id);
-        if (!deletedItem) {
-            return res.status(404).json({ message: 'Item not found' });
-        }
-        res.json({ message: 'Item deleted successfully' });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-// Start the server
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+// // Start the server
+// const PORT = 3000;
+// app.listen(PORT, () => {
+//     console.log(`Server running on http://localhost:${PORT}`);
+// });

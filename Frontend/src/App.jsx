@@ -1,63 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import axios from "axios";
 
-const API_URL = 'http://localhost:3000/items';
-
-function App() {
+const App = () => {
   const [items, setItems] = useState([]);
-  const [form, setForm] = useState({ name: '', description: '', price: '' });
+  const [form, setForm] = useState({ name: "", description: "", price: "" });
   const [editingId, setEditingId] = useState(null);
 
+  const baseUrl = "http://localhost:3000/items";
+
+  // Fetch all items
   const fetchItems = async () => {
-    try {
-      const response = await axios.get(API_URL);
-      setItems(response.data);
-    } catch (error) {
-      console.error('Error fetching items:', error);
-    }
+    const res = await axios.get(baseUrl);
+    setItems(res.data);
   };
 
-  const handleFormChange = (e) => {
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+  // Handle input changes
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleFormSubmit = async (e) => {
+  // Handle form submission (Create or Update)
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (editingId) {
-      // Update item
-      try {
-        const response = await axios.put(`${API_URL}/${editingId}`, form);
-        setItems(items.map((item) => (item._id === editingId ? response.data : item)));
-        setEditingId(null);
-      } catch (error) {
-        console.error('Error updating item:', error);
-      }
+      await axios.put(`${baseUrl}/${editingId}`, form);
     } else {
-      // Create item
-      try {
-        const response = await axios.post(API_URL, form);
-        setItems([...items, response.data]);
-      } catch (error) {
-        console.error('Error creating item:', error);
-      }
+      await axios.post(baseUrl, form);
     }
-    setForm({ name: '', description: '', price: '' });
+    setForm({ name: "", description: "", price: "" });
+    setEditingId(null);
+    fetchItems();
   };
 
+  // Delete an item
+  const handleDelete = async (id) => {
+    await axios.delete(`${baseUrl}/${id}`);
+    fetchItems();
+  };
+
+  // Edit an item
   const handleEdit = (item) => {
     setForm({ name: item.name, description: item.description, price: item.price });
     setEditingId(item._id);
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`${API_URL}/${id}`);
-      setItems(items.filter((item) => item._id !== id));
-    } catch (error) {
-      console.error('Error deleting item:', error);
-    }
   };
 
   useEffect(() => {
@@ -66,57 +51,47 @@ function App() {
 
   return (
     <div className="app">
-      <h1>CRUD Application</h1>
-      <form className="item-form" onSubmit={handleFormSubmit}>
-        <h2>{editingId ? 'Edit Item' : 'Add Item'}</h2>
+      <h1>CRUD Operations</h1>
+      <form className="form" onSubmit={handleSubmit}>
         <input
           type="text"
           name="name"
           placeholder="Name"
           value={form.name}
-          onChange={handleFormChange}
+          onChange={handleChange}
           required
         />
-        <textarea
+        <input
+          type="text"
           name="description"
           placeholder="Description"
           value={form.description}
-          onChange={handleFormChange}
+          onChange={handleChange}
         />
         <input
           type="number"
           name="price"
           placeholder="Price"
           value={form.price}
-          onChange={handleFormChange}
+          onChange={handleChange}
+          required
         />
-        <button type="submit">{editingId ? 'Update' : 'Add'}</button>
-        {editingId && <button onClick={() => setEditingId(null)}>Cancel</button>}
+        <button type="submit">{editingId ? "Update" : "Add"} Item</button>
       </form>
-      <div className="item-list">
-        <h2>Item List</h2>
-        {items.length === 0 ? (
-          <p>No items found</p>
-        ) : (
-          <ul>
-            {items.map((item) => (
-              <li key={item._id}>
-                <div>
-                  <strong>{item.name}</strong>
-                  <p>{item.description}</p>
-                  <p>Price: ${item.price}</p>
-                </div>
-                <div className="actions">
-                  <button onClick={() => handleEdit(item)}>Edit</button>
-                  <button onClick={() => handleDelete(item._id)}>Delete</button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
+
+      <div className="items-list">
+        {items.map((item) => (
+          <div key={item._id} className="item">
+            <h3>{item.name}</h3>
+            <p>{item.description}</p>
+            <p><strong>Price:</strong> ${item.price}</p>
+            <button onClick={() => handleEdit(item)}>Edit</button>
+            <button onClick={() => handleDelete(item._id)}>Delete</button>
+          </div>
+        ))}
       </div>
     </div>
   );
-}
+};
 
 export default App;
