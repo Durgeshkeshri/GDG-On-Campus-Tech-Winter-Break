@@ -14,6 +14,7 @@ This document serves as a beginner-friendly guide to demonstrate **basic server 
 7. [Built-in Middleware](#built-in-middleware)
 8. [API Testing](#api-testing)
 9. [MongoDB CRUD Operations](#mongodb-crud-operations)
+10. [Express Js Quiz](#quiz)
 
 ---
 
@@ -157,6 +158,11 @@ const express = require("express");
 const app = express();
 
 app.use(express.json());
+
+// A space becomes %20
+// & becomes %26
+// = becomes %3D
+
 app.use(express.urlencoded({ extended: true }));
 
 // // use thunderclient or postman 
@@ -275,9 +281,9 @@ app.use(cors({
     origin: 'http://localhost:5173' // Allow requests only from this origin
 }));
 // MongoDB connection
-mongoose.connect('mongodb+srv://durgeshkeshri7:Durgesh1027@cluster0.ezhdt7p.mongodb.net/crud-example?retryWrites=true&w=majority', {
+mongoose.connect('', {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
+    useUnifiedTopology: true, // to avoid decription warnings 
 });
 
 const db = mongoose.connection;
@@ -371,7 +377,9 @@ app.listen(PORT, () => {
 ```
 
 ---
-
+## Quiz
+[Express Js Quiz](https://forms.gle/kL4R41k1W2K2AEsr8)
+---
 ## Summary
 This guide covers key Express.js concepts for building servers, serving static content, routing, middleware, and MongoDB database operations. These examples provide a solid foundation for creating APIs and backend applications.
 
