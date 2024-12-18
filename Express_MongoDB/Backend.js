@@ -7,7 +7,7 @@ app.use(express.json());
 // MongoDB connection
 mongoose.connect('', {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
+    useUnifiedTopology: true, // to avoid decription warnings 
 });
 
 const db = mongoose.connection;
